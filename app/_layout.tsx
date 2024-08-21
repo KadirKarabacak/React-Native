@@ -1,37 +1,54 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+// rnfes code snipper will create this
+import { StyleSheet, Text, View } from "react-native";
+// Like <Outlet /> component we need to use Slot so our content replace with it ->
+import { SplashScreen, Stack } from "expo-router";
+import { useFonts } from "expo-font";
+import { useEffect } from "react";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+const RootLayout = () => {
+    const [fontsLoaded, error] = useFonts({
+        "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
+        "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
+        "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
+        "Poppins-ExtraLight": require("../assets/fonts/Poppins-ExtraLight.ttf"),
+        "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
+        "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
+        "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
+        "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
+        "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
+    });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    useEffect(() => {
+        if (error) throw error;
 
-  if (!loaded) {
-    return null;
-  }
+        if (fontsLoaded) SplashScreen.hideAsync();
+    }, [fontsLoaded, error]);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
-  );
-}
+    if (!fontsLoaded && !error) return null;
+
+    return (
+        // <>
+        //     <Text>Header</Text>
+        //     <Slot />
+        //     <Text>Footer</Text>
+        // </>
+        // ! Or we can use Stack with Stack.Screen. Name prop must be a route name
+        <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+        </Stack>
+    );
+};
+
+export default RootLayout;
+
+//! Styles we must spesify to use up in JSX like styles.container
+const styles = StyleSheet.create({
+    container: {
+        display: "flex",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});
