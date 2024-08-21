@@ -1,0 +1,9 @@
+export const pBlack = "Poppins-Black";
+export const pThin = "Poppins-Thin";
+export const pLight = "Poppins-Light";
+export const pExtraLight = "Poppins-ExtraLight";
+export const pRegular = "Poppins-Regular";
+export const pMedium = "Poppins-Medium";
+export const pSemibold = "Poppins-SemiBold";
+export const pBold = "Poppins-Bold";
+export const pExtraBold = "Poppins-ExtraBold";
