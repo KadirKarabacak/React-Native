@@ -63,10 +63,10 @@ Join our community of developers creating universal apps.
 -   Expo aynı zamanda pre-built componentler ve api'lar barındırır. (**Navigation, Gestures, Camera, Maps gibi**).
 -   Expo Nextjs'de olduğu gibi Expo Router ismini verdiği file-based routing sağlar ve yakın süreçte RSC (React-Server-Components) özelliğini bünyelerine eklemeye odaklandılar.
 
-## Built-in Components
+## `Built-in Components`
 
 -   Text componenti React'ta kullandığımız p veya h1 gibi tagler yerine kullanılır ve text görüntüler.
--   View componenti div kullanmaya benzer bir layout oluşturmak ve içerisine diğer component'leri eklemek için kullanılır. Bazı prebuilt propları vardır, görünümü ve davranışı etkilerler. Default olarak flexbox kullanır.
+-   View componenti div kullanmaya benzer bir layout oluşturmak ve içerisine diğer component'leri eklemek için kullanılır. Default olarak flexbox kullanır.
 -   TouchableHighlight dokunmanın kullanıcıya ekranda bir dönüş yapmasını sağlar.
 -   TouchableWithoutFeedback dkunmanın kullanıcıya bir geri dönüşü olmaz. Genelde Linkler ve Resimler için kullanılır.
 -   ActivityIndicator bir spinner yada loading indicator göstermemize olanak verir.
