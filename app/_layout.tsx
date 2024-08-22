@@ -1,8 +1,6 @@
 // rnfes code snipper will create this
-import { StyleSheet, Text, View } from "react-native";
-// Like <Outlet /> component we need to use Slot so our content replace with it ->
-import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync();
@@ -29,14 +27,15 @@ const RootLayout = () => {
     if (!fontsLoaded && !error) return null;
 
     return (
-        // <>
-        //     <Text>Header</Text>
-        //     <Slot />
-        //     <Text>Footer</Text>
-        // </>
-        // ! Or we can use Stack with Stack.Screen. Name prop must be a route name
+        // ! Use Stack with Stack.Screen. Name prop must be a route name
         <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            {/* <Stack.Screen
+                name="/search/[query]"
+                options={{ headerShown: false }}
+            /> */}
         </Stack>
     );
 };
@@ -44,11 +43,11 @@ const RootLayout = () => {
 export default RootLayout;
 
 //! Styles we must spesify to use up in JSX like styles.container
-const styles = StyleSheet.create({
-    container: {
-        display: "flex",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-});
+// const styles = StyleSheet.create({
+//     container: {
+//         display: "flex",
+//         flex: 1,
+//         justifyContent: "center",
+//         alignItems: "center",
+//     },
+// });
