@@ -1,10 +1,17 @@
-import { View, Text, Image } from "react-native";
-import { Tabs, Redirect } from "expo-router";
+import { View, Text, Image, ImageSourcePropType } from "react-native";
+import { Tabs } from "expo-router";
 import React from "react";
 import { icons } from "../../constants";
 import { pRegular, pSemibold } from "@/constants/fonts";
 
-const TabIcon = ({ icon, color, name, focused }) => {
+interface TabIconProps {
+    icon: ImageSourcePropType;
+    color: string;
+    name: string;
+    focused: boolean;
+}
+
+const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
     return (
         <View
             style={{
