@@ -5,9 +5,9 @@ import { pSemibold } from "@/constants/fonts";
 interface CustomButtonProps {
     title: string;
     handlePress: () => void;
-    containerStyles: object;
-    textStyles: object;
-    isLoading: boolean;
+    containerStyles?: object;
+    textStyles?: object;
+    isLoading?: boolean;
 }
 
 const CustomButton = ({
@@ -23,7 +23,7 @@ const CustomButton = ({
             activeOpacity={0.7}
             style={{
                 backgroundColor: "#FF9C01",
-                borderRadius: 50,
+                borderRadius: 10,
                 minHeight: 62,
                 justifyContent: "center",
                 alignItems: "center",
