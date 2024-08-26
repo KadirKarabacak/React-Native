@@ -1,4 +1,5 @@
 // rnfes code snipper will create this
+import GlobalProvider from "@/context/GlobalProvider";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
@@ -27,16 +28,14 @@ const RootLayout = () => {
     if (!fontsLoaded && !error) return null;
 
     return (
-        // ! Use Stack with Stack.Screen. Name prop must be a route name
-        <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            {/* <Stack.Screen
-                name="/search/[query]"
-                options={{ headerShown: false }}
-            /> */}
-        </Stack>
+        <GlobalProvider>
+            {/* Use Stack with Stack.Screen. Name prop must be a route name */}
+            <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+        </GlobalProvider>
     );
 };
 
