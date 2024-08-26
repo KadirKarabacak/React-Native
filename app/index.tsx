@@ -2,20 +2,17 @@ import CustomButton from "@/components/CustomButton";
 import { images } from "@/constants";
 import { pRegular } from "@/constants/fonts";
 import { StatusBar } from "expo-status-bar";
-import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-} from "react-native";
+import { Image, ScrollView, Text, View, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect, router } from "expo-router";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 export default function Index() {
     const { height } = Dimensions.get("window");
     const vh = height / 100; // 1vh 1% of windows height
+    const { isLoading, isLoggedIn } = useGlobalContext();
+
+    if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
             {/* Our content can be larger than for different devices, so we must use scrollview */}
@@ -93,5 +90,3 @@ export default function Index() {
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({});
