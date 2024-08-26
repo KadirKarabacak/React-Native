@@ -3,9 +3,10 @@ import CustomButton from "@/components/CustomButton";
 import FormField from "@/components/FormField";
 import { images } from "@/constants";
 import { pRegular, pSemibold } from "@/constants/fonts";
-import { Link } from "expo-router";
+import { signIn } from "@/lib/appwrite";
+import { Link, router } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, Image, ScrollView, Text, View } from "react-native";
+import { Alert, Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
@@ -17,7 +18,38 @@ const SignIn = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const submit = () => {};
+    const submit = async () => {
+        // Validation for fields
+        if (!form.email || !form.password) {
+            Alert.alert("Error", "Please fill in all the fields");
+            return;
+        }
+
+        // Loading indicator active
+        setIsSubmitting(true);
+
+        try {
+            // await logout();
+            // await checkSession();
+            // Create user
+            await signIn({
+                email: form.email,
+                password: form.password,
+            });
+
+            // Set it to global state...
+
+            // Redirect user
+            router.replace("/home");
+        } catch (error: any) {
+            // Alert Errors
+            Alert.alert("Error", error.message);
+        } finally {
+            // Loading indicator passive
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
             <ScrollView>
