@@ -22,6 +22,7 @@ const RootLayout = () => {
     useEffect(() => {
         if (error) throw error;
 
+        // If contents are ready hide splash screen
         if (fontsLoaded) SplashScreen.hideAsync();
     }, [fontsLoaded, error]);
 
@@ -41,7 +42,7 @@ const RootLayout = () => {
 
 export default RootLayout;
 
-//! Styles we must spesify to use up in JSX like styles.container
+//! Styles we must spesify to use up in JSX like styles.container or into style prop
 // const styles = StyleSheet.create({
 //     container: {
 //         display: "flex",
