@@ -3,7 +3,8 @@ import CustomButton from "@/components/CustomButton";
 import FormField from "@/components/FormField";
 import { images } from "@/constants";
 import { pRegular, pSemibold } from "@/constants/fonts";
-import { signIn } from "@/lib/appwrite";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { getCurrentUser, signIn } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Dimensions, Image, ScrollView, Text, View } from "react-native";
@@ -17,6 +18,7 @@ const SignIn = () => {
         password: "",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { setUser, setIsLoggedIn } = useGlobalContext();
 
     const submit = async () => {
         // Validation for fields
@@ -29,16 +31,18 @@ const SignIn = () => {
         setIsSubmitting(true);
 
         try {
-            // await logout();
-            // await checkSession();
             // Create user
             await signIn({
                 email: form.email,
                 password: form.password,
             });
 
+            const result = await getCurrentUser();
             // Set it to global state...
+            setUser(result);
+            setIsLoggedIn(true);
 
+            Alert.alert("Success", "User signed in successfully");
             // Redirect user
             router.replace("/home");
         } catch (error: any) {
