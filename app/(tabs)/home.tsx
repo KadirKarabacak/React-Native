@@ -84,7 +84,7 @@ const Home = () => {
                         </View>
 
                         <SearchInput
-                            value="null"
+                            value=""
                             handleChangeText={() => {}}
                             placeholder="Search for a video topic"
                         />
