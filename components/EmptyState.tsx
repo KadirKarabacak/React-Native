@@ -43,6 +43,7 @@ const EmptyState = ({ title, subtitle }: EmptyStateTypes) => {
                     fontSize: 14,
                     lineHeight: 16,
                     color: "rgb(243 244 246)",
+                    marginTop: 4,
                 }}
             >
                 {subtitle}
