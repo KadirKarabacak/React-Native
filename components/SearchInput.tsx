@@ -1,7 +1,8 @@
 import { icons } from "@/constants";
 import { pRegular } from "@/constants/fonts";
+import { router, usePathname } from "expo-router";
 import React, { useState } from "react";
-import { Image, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, TextInput, TouchableOpacity, View } from "react-native";
 
 interface FormFieldTypes {
     title?: string;
@@ -10,6 +11,7 @@ interface FormFieldTypes {
     otherStyles?: object;
     keyboardType?: string;
     placeholder?: string;
+    initialQuery?: string | string[];
 }
 
 const SearchInput = ({
@@ -19,9 +21,11 @@ const SearchInput = ({
     otherStyles,
     keyboardType,
     placeholder,
+    initialQuery,
 }: FormFieldTypes) => {
-    const [showPassword, setShowPassword] = useState(false);
+    const pathname = usePathname();
     const [isFocused, setIsFocused] = useState(false);
+    const [query, setQuery] = useState(initialQuery || "");
 
     return (
         <View
@@ -53,16 +57,26 @@ const SearchInput = ({
                     borderRadius: 10,
                     alignItems: "center",
                 }}
-                value={value}
+                value={query}
                 placeholder={placeholder}
-                placeholderTextColor="#7b7b8b"
-                onChangeText={handleChangeText}
-                // For hide text eg password
-                secureTextEntry={title === "Password" && !showPassword}
+                placeholderTextColor="#CDCDE0"
+                onChangeText={e => setQuery(e)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
             />
-            <TouchableOpacity style={{ position: "absolute", right: 15 }}>
+            <TouchableOpacity
+                style={{ position: "absolute", right: 15 }}
+                onPress={() => {
+                    if (!query)
+                        return Alert.alert(
+                            "Missing query",
+                            "Please input something to search"
+                        );
+                    if (pathname.startsWith("/search"))
+                        router.setParams({ query });
+                    else router.push(`/search/${query}`);
+                }}
+            >
                 <Image
                     source={icons.search}
                     style={{ width: 20, height: 20 }}
