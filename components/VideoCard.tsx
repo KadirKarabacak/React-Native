@@ -1,23 +1,13 @@
 import { icons } from "@/constants";
 import { pRegular, pSemibold } from "@/constants/fonts";
+import { ResizeMode, Video } from "expo-av";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import WebView from "react-native-webview";
 
-// interface CreatorTypes {
-//     username: string;
-//     avatar: string;
-// }
-
-// interface VideoTypes {
-//     title: string;
-//     thumbnail: string;
-//     video: string;
-//     creator: CreatorTypes;
-// }
-
-// interface VideoCardTypes {
-//     video: VideoTypes;
-// }
+const isEmbeddedVideo = (url: string) => {
+    return url.includes("youtube.com") || url.includes("vimeo.com");
+};
 
 const VideoCard = ({
     video: {
@@ -28,6 +18,8 @@ const VideoCard = ({
     },
 }) => {
     const [play, setPlay] = useState(false);
+    const isEmbedded = isEmbeddedVideo(video);
+
     return (
         <View
             style={{
@@ -36,7 +28,7 @@ const VideoCard = ({
                 paddingLeft: 16,
                 paddingRight: 16,
                 marginBottom: 15,
-                // gap: 5,
+                gap: 5,
             }}
         >
             <View
@@ -122,14 +114,72 @@ const VideoCard = ({
                 </View>
             </View>
             {play ? (
-                <Text style={{ color: "white" }}>Playing...</Text>
+                isEmbedded ? (
+                    <WebView
+                        source={{ uri: video, baseUrl: video }}
+                        style={{
+                            flex: 1,
+                            width: "100%",
+                            height: 300,
+                            borderRadius: 20,
+                            overflow: "hidden",
+                            marginTop: 15,
+                            backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        }}
+                        allowsInlineMediaPlayback={true}
+                        javaScriptEnabled={true}
+                        allowsFullscreenVideo={true}
+                        scalesPageToFit={true}
+                        startInLoadingState={true}
+                        mediaPlaybackRequiresUserAction={false}
+                        onLoadProgress={syntheticEvent => {
+                            const { nativeEvent } = syntheticEvent;
+                            if (nativeEvent.progress == 1) setPlay(true);
+                        }}
+                        // onLoadStart={() => console.log("Load started")}
+                        // onLoadEnd={() => setPlay(true)}
+                        // onError={error => {
+                        //     console.log("Error loading page:", error);
+                        //     setPlay(false);
+                        // }}
+                        // onMessage={event =>
+                        //     console.log(
+                        //         "Message from webview:",
+                        //         event.nativeEvent.data
+                        //     )
+                        // }
+                    />
+                ) : (
+                    <Video
+                        source={{ uri: video }}
+                        style={{
+                            width: "100%",
+                            height: 220,
+                            borderRadius: 20,
+                            marginTop: 15,
+                        }}
+                        useNativeControls
+                        resizeMode={ResizeMode.COVER}
+                        shouldPlay
+                        onPlaybackStatusUpdate={status => {
+                            if (status.didJustFinish) {
+                                setPlay(false);
+                            }
+                            console.log(status);
+                        }}
+                        onError={error => {
+                            console.error("Video error:", error);
+                            setPlay(false);
+                        }}
+                    />
+                )
             ) : (
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setPlay(true)}
                     style={{
                         width: "100%",
-                        height: 400,
+                        height: 300,
                         borderRadius: 10,
                         marginTop: 4,
                         marginBottom: 20,
