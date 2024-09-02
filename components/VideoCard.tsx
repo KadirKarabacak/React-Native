@@ -5,6 +5,22 @@ import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import WebView from "react-native-webview";
 
+interface CreatorTypes {
+    username: string;
+    avatar: string;
+}
+
+interface CardTypes {
+    title: string;
+    thumbnail: string;
+    video: string;
+    creator: CreatorTypes;
+}
+
+interface VideoTypes {
+    video: CardTypes;
+}
+
 const isEmbeddedVideo = (url: string) => {
     return url.includes("youtube.com") || url.includes("vimeo.com");
 };
@@ -16,7 +32,7 @@ const VideoCard = ({
         video,
         creator: { username, avatar },
     },
-}) => {
+}: VideoTypes) => {
     const [play, setPlay] = useState(false);
     const isEmbedded = isEmbeddedVideo(video);
 
@@ -115,40 +131,47 @@ const VideoCard = ({
             </View>
             {play ? (
                 isEmbedded ? (
-                    <WebView
-                        source={{ uri: video, baseUrl: video }}
+                    <View
                         style={{
-                            flex: 1,
                             width: "100%",
                             height: 300,
-                            borderRadius: 20,
-                            overflow: "hidden",
                             marginTop: 15,
-                            backgroundColor: "rgba(255, 255, 255, 0.1)",
+                            borderRadius: 20,
+                            overflow: "hidden", // Border radius'un uygulanabilmesi için gerekli
                         }}
-                        allowsInlineMediaPlayback={true}
-                        javaScriptEnabled={true}
-                        allowsFullscreenVideo={true}
-                        scalesPageToFit={true}
-                        startInLoadingState={true}
-                        mediaPlaybackRequiresUserAction={false}
-                        onLoadProgress={syntheticEvent => {
-                            const { nativeEvent } = syntheticEvent;
-                            if (nativeEvent.progress == 1) setPlay(true);
-                        }}
-                        // onLoadStart={() => console.log("Load started")}
-                        // onLoadEnd={() => setPlay(true)}
-                        // onError={error => {
-                        //     console.log("Error loading page:", error);
-                        //     setPlay(false);
-                        // }}
-                        // onMessage={event =>
-                        //     console.log(
-                        //         "Message from webview:",
-                        //         event.nativeEvent.data
-                        //     )
-                        // }
-                    />
+                    >
+                        <WebView
+                            source={{ uri: video, baseUrl: video }}
+                            style={{
+                                flex: 1,
+                                width: "100%",
+                                height: 300,
+                                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                            }}
+                            allowsInlineMediaPlayback={true}
+                            javaScriptEnabled={true}
+                            allowsFullscreenVideo={true}
+                            scalesPageToFit={true}
+                            startInLoadingState={true}
+                            mediaPlaybackRequiresUserAction={false}
+                            onLoadProgress={syntheticEvent => {
+                                const { nativeEvent } = syntheticEvent;
+                                if (nativeEvent.progress == 1) setPlay(true);
+                            }}
+                            // onLoadStart={() => console.log("Load started")}
+                            // onLoadEnd={() => setPlay(true)}
+                            // onError={error => {
+                            //     console.log("Error loading page:", error);
+                            //     setPlay(false);
+                            // }}
+                            // onMessage={event =>
+                            //     console.log(
+                            //         "Message from webview:",
+                            //         event.nativeEvent.data
+                            //     )
+                            // }
+                        />
+                    </View>
                 ) : (
                     <Video
                         source={{ uri: video }}
@@ -180,7 +203,7 @@ const VideoCard = ({
                     style={{
                         width: "100%",
                         height: 300,
-                        borderRadius: 10,
+                        borderRadius: 20,
                         marginTop: 4,
                         marginBottom: 20,
                         justifyContent: "center",
@@ -194,7 +217,7 @@ const VideoCard = ({
                             width: "100%",
                             height: "100%",
                             marginTop: 8,
-                            borderRadius: 10,
+                            borderRadius: 20,
                         }}
                         resizeMode="cover"
                     />
