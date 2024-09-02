@@ -2,6 +2,7 @@
 import GlobalProvider from "@/context/GlobalProvider";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import React from "react";
 import { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync();

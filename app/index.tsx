@@ -6,6 +6,7 @@ import { Image, ScrollView, Text, View, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect, router } from "expo-router";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import React from "react";
 
 export default function Index() {
     const { height } = Dimensions.get("window");
