@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { pSemibold } from "@/constants/fonts";
 
@@ -41,7 +41,11 @@ const CustomButton = ({
                     ...textStyles,
                 }}
             >
-                {title}
+                {isLoading ? (
+                    <ActivityIndicator size="small" color="#161622" />
+                ) : (
+                    title
+                )}
             </Text>
         </TouchableOpacity>
     );
