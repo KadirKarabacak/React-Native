@@ -47,38 +47,33 @@ const TrendingItem = ({ activeItem, item }: { activeItem: any; item: any }) => {
         >
             {play ? (
                 isEmbedded ? (
-                    <WebView
-                        source={{ uri: item.video, baseUrl: item.video }}
+                    <View
                         style={{
-                            flex: 1,
                             width: 182,
                             height: 252,
-                            marginTop: 15,
+                            marginTop: 10,
+                            borderRadius: 20,
+                            overflow: "hidden", // Border radius'un uygulanabilmesi için gerekli
                             backgroundColor: "rgba(255, 255, 255, 0.1)",
                         }}
-                        allowsInlineMediaPlayback={true}
-                        javaScriptEnabled={true}
-                        allowsFullscreenVideo={true}
-                        scalesPageToFit={true}
-                        startInLoadingState={true}
-                        mediaPlaybackRequiresUserAction={false}
-                        onLoadProgress={syntheticEvent => {
-                            const { nativeEvent } = syntheticEvent;
-                            if (nativeEvent.progress == 1) setPlay(true);
-                        }}
-                        // onLoadStart={() => console.log("Load started")}
-                        // onLoadEnd={() => setPlay(true)}
-                        // onError={error => {
-                        //     console.log("Error loading page:", error);
-                        //     setPlay(false);
-                        // }}
-                        // onMessage={event =>
-                        //     console.log(
-                        //         "Message from webview:",
-                        //         event.nativeEvent.data
-                        //     )
-                        // }
-                    />
+                    >
+                        <WebView
+                            source={{ uri: item.video }}
+                            style={{
+                                flex: 1,
+                            }}
+                            allowsInlineMediaPlayback={true}
+                            javaScriptEnabled={true}
+                            allowsFullscreenVideo={true}
+                            scalesPageToFit={true}
+                            startInLoadingState={true}
+                            mediaPlaybackRequiresUserAction={false}
+                            onLoadProgress={syntheticEvent => {
+                                const { nativeEvent } = syntheticEvent;
+                                if (nativeEvent.progress == 1) setPlay(true);
+                            }}
+                        />
+                    </View>
                 ) : (
                     <Video
                         source={{ uri: item.video }}
@@ -116,35 +111,43 @@ const TrendingItem = ({ activeItem, item }: { activeItem: any; item: any }) => {
                         marginTop: 10,
                         marginBottom: 10,
                         backgroundColor: "rgba(0, 0, 0, 0.1)",
+                        borderRadius: 15,
                     }}
                     activeOpacity={0.5}
                     onPress={() => setPlay(true)}
                 >
-                    <ImageBackground
-                        source={{ uri: item.thumbnail }}
+                    <View
                         style={{
                             width: 182,
                             height: 252,
-                            marginTop: 10,
-                            marginBottom: 10,
-                            backgroundColor: "rgba(255, 255, 255, 0.10)",
+                            borderRadius: 20,
+                            overflow: "hidden", // Bu satır önemli, borderRadius'un içindeki içerikleri etkilemesi için gerekli
                         }}
-                        resizeMode="cover"
                     >
-                        <View
+                        <ImageBackground
+                            source={{ uri: item.thumbnail }}
                             style={{
-                                justifyContent: "center",
-                                alignItems: "center",
-                                flex: 1,
+                                width: 182,
+                                height: 252,
+                                backgroundColor: "rgba(255, 255, 255, 0.10)",
                             }}
+                            resizeMode="cover"
                         >
-                            <Image
-                                source={icons.play}
-                                style={{ width: 48, height: 48 }}
-                                resizeMode="contain"
-                            />
-                        </View>
-                    </ImageBackground>
+                            <View
+                                style={{
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    flex: 1,
+                                }}
+                            >
+                                <Image
+                                    source={icons.play}
+                                    style={{ width: 48, height: 48 }}
+                                    resizeMode="contain"
+                                />
+                            </View>
+                        </ImageBackground>
+                    </View>
                 </TouchableOpacity>
             )}
         </Animatable.View>
@@ -152,7 +155,7 @@ const TrendingItem = ({ activeItem, item }: { activeItem: any; item: any }) => {
 };
 
 const Trending = ({ posts }: { posts: any }) => {
-    const [activeItem, setActiveItem] = useState(posts[0]);
+    const [activeItem, setActiveItem] = useState(posts[1]);
 
     const viewableItemsChanged = ({
         viewableItems,
@@ -174,8 +177,8 @@ const Trending = ({ posts }: { posts: any }) => {
             horizontal
             // On swipe change the active item
             onViewableItemsChanged={viewableItemsChanged}
-            viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
-            // contentOffset={{ x: 120 }}
+            viewabilityConfig={{ itemVisiblePercentThreshold: 80 }}
+            contentOffset={{ x: 105, y: 0 }}
         />
     );
 };
