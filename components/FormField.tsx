@@ -49,7 +49,8 @@ const FormField = ({
                 <TextInput
                     style={{
                         flex: 1,
-                        color: "white",
+                        color: "#CDCDE0",
+                        // color: "white",
                         fontFamily: pSemibold,
                         fontSize: 16,
                         lineHeight: 24,
@@ -57,16 +58,16 @@ const FormField = ({
                         borderColor: isFocused ? "#FF9C01" : "#313144",
                         width: "100%",
                         backgroundColor: "#1E1E2D",
-                        paddingBottom: 10,
-                        paddingTop: 10,
-                        paddingLeft: 10,
+                        paddingBottom: 15,
+                        paddingTop: 15,
+                        paddingLeft: 15,
                         paddingRight: 10,
                         borderRadius: 10,
                         alignItems: "center",
                     }}
                     value={value}
                     placeholder={placeholder}
-                    placeholderTextColor="7b7b8b"
+                    placeholderTextColor="#7b7b8b"
                     onChangeText={handleChangeText}
                     // For hide text eg password
                     secureTextEntry={title === "Password" && !showPassword}
