@@ -4,15 +4,17 @@ import Trending from "@/components/Trending";
 import VideoCard from "@/components/VideoCard";
 import { images } from "@/constants";
 import { pMedium, pRegular, pSemibold } from "@/constants/fonts";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import React, { useState } from "react";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 const Home = () => {
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
+    const { user, setUser, setIsLoggedIn } = useGlobalContext();
+
     const [refreshing, setRefreshing] = useState(false);
 
     // Create for <RefreshControl /> Allow user to pull screen down to refresh
@@ -45,7 +47,7 @@ const Home = () => {
                     >
                         <View
                             style={{
-                                alignItems: "start",
+                                alignItems: "flex-start",
                                 marginBottom: 24,
                                 flexDirection: "row",
                                 justifyContent: "space-between",
@@ -60,17 +62,17 @@ const Home = () => {
                                         color: "rgb(243 244 246)",
                                     }}
                                 >
-                                    Welcome Back
+                                    Welcome back
                                 </Text>
                                 <Text
                                     style={{
                                         fontFamily: pSemibold,
-                                        fontSize: 24,
+                                        fontSize: 22,
                                         lineHeight: 32,
-                                        color: "white",
+                                        color: "#FF9C01",
                                     }}
                                 >
-                                    Ex Reminder
+                                    {user?.username}
                                 </Text>
                             </View>
 
@@ -82,7 +84,6 @@ const Home = () => {
                                 />
                             </View>
                         </View>
-
                         <SearchInput
                             value=""
                             handleChangeText={() => {}}
