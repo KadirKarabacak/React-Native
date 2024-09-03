@@ -25,7 +25,7 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
 
     useEffect(() => {
         getCurrentUser()
-            .then(res => {
+            .then((res: any) => {
                 setIsLoading(true);
                 if (res) {
                     setIsLoggedIn(true);
@@ -41,7 +41,13 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
 
     return (
         <GlobalContext.Provider
-            value={{ isLoggedIn, setIsLoggedIn, user, setUser, isLoading }}
+            value={{
+                isLoggedIn,
+                setIsLoggedIn,
+                user,
+                setUser,
+                isLoading,
+            }}
         >
             {children}
         </GlobalContext.Provider>
