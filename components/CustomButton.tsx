@@ -3,7 +3,7 @@ import React from "react";
 import { pSemibold } from "@/constants/fonts";
 
 interface CustomButtonProps {
-    title: string;
+    title?: string;
     handlePress: () => void;
     containerStyles?: object;
     textStyles?: object;
