@@ -7,13 +7,13 @@ import { pMedium, pRegular, pSemibold } from "@/constants/fonts";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 const Home = () => {
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
-    const { user, setUser, setIsLoggedIn } = useGlobalContext();
+    const { user } = useGlobalContext();
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -27,10 +27,15 @@ const Home = () => {
         setRefreshing(false);
     };
 
+    useEffect(() => {
+        // Refetch posts whenever the bookmarkedVideos array changes
+        refetch();
+    }, [user.bookmarkedVideos]);
+
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
             <FlatList
-                data={posts}
+                data={posts || []}
                 // Key prop
                 keyExtractor={item => String(item.thumbnail)}
                 // Rendering item
@@ -116,6 +121,8 @@ const Home = () => {
                     <EmptyState
                         title="No Videos Found"
                         subtitle="Be the first one to upload a video"
+                        redirectPath="/create"
+                        buttonTitle="Create Video"
                     />
                 )}
                 // Allow user to refresh screen by pulling down
