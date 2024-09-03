@@ -6,11 +6,19 @@ import { getUserPosts, signOut } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import { router } from "expo-router";
 import React from "react";
-import { FlatList, Image, TouchableOpacity, View } from "react-native";
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
-    const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+    const { data: posts, isLoading } = useAppwrite(() =>
+        getUserPosts(user.$id)
+    );
     const { user, setUser, setIsLoggedIn } = useGlobalContext();
     // const [refreshing, setRefreshing] = useState(false);
 
@@ -21,6 +29,8 @@ const Profile = () => {
 
         router.replace("/sign-in");
     };
+
+    if (isLoading) return <ActivityIndicator size="large" color="#FF9C01" />;
 
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
