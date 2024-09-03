@@ -5,8 +5,8 @@ import { pMedium, pSemibold } from "@/constants/fonts";
 import { searchPosts } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Search = () => {
@@ -17,7 +17,6 @@ const Search = () => {
         isLoading,
     } = useAppwrite(() => searchPosts(query));
     // const [refreshing, setRefreshing] = useState(false);
-    console.log(posts);
 
     useEffect(() => {
         refetch();
@@ -76,6 +75,8 @@ const Search = () => {
                     <EmptyState
                         title="No Videos Found"
                         subtitle={`No videos found for "${query}" search query`}
+                        buttonTitle="Go back"
+                        redirectPath="/home"
                     />
                 )}
             />
