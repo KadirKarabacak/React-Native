@@ -1,7 +1,9 @@
 import { icons } from "@/constants";
 import { pRegular, pSemibold } from "@/constants/fonts";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { addBookmark, removeBookmark } from "@/lib/appwrite";
 import { ResizeMode, Video } from "expo-av";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import WebView from "react-native-webview";
 
@@ -15,6 +17,7 @@ interface CardTypes {
     thumbnail: string;
     video: string;
     creator: CreatorTypes;
+    $id: string;
 }
 
 interface VideoTypes {
@@ -31,16 +34,45 @@ const VideoCard = ({
         thumbnail,
         video,
         creator: { username, avatar },
+        $id,
     },
 }: VideoTypes) => {
     const [play, setPlay] = useState(false);
     const isEmbedded = isEmbeddedVideo(video);
+    const { user, setUser } = useGlobalContext();
+    const [isBookmarked, setIsBookmarked] = useState(
+        user?.bookmarkedVideos?.includes($id)
+    );
+
+    useEffect(() => {
+        setIsBookmarked(user?.bookmarkedVideos?.includes($id));
+    }, [user?.bookmarkedVideos, $id]);
+
+    const handleToggleBookmark = async () => {
+        if (!isBookmarked) {
+            await addBookmark($id);
+            setIsBookmarked(true);
+            setUser({
+                ...user,
+                bookmarkedVideos: [...user.bookmarkedVideos, $id],
+            });
+        } else {
+            await removeBookmark($id);
+            setIsBookmarked(false);
+            setUser({
+                ...user,
+                bookmarkedVideos: user.bookmarkedVideos.filter(
+                    (videoId: string) => videoId !== $id
+                ),
+            });
+        }
+    };
 
     return (
         <View
             style={{
                 flexDirection: "column",
-                alingItems: "center",
+                alignItems: "center",
                 paddingLeft: 16,
                 paddingRight: 16,
                 marginBottom: 15,
@@ -51,14 +83,14 @@ const VideoCard = ({
                 style={{
                     flexDirection: "row",
                     gap: 3,
-                    alightItems: "start",
+                    alignItems: "flex-start",
                 }}
             >
                 <View
                     style={{
                         flexDirection: "row",
                         justifyContent: "center",
-                        alingItems: "center",
+                        alignItems: "center",
                         flex: 1,
                     }}
                 >
@@ -121,12 +153,32 @@ const VideoCard = ({
                     </View>
                 </View>
                 {/*  */}
-                <View style={{ paddingTop: 6 }}>
-                    <Image
-                        source={icons.menu}
-                        style={{ height: 20, width: 20 }}
-                        resizeMode="contain"
-                    />
+
+                <View style={{ paddingTop: 6, flexDirection: "row", gap: 8 }}>
+                    {/* Onpress update videos as bookmarked with a relation to user in appwrite */}
+                    <TouchableOpacity onPress={handleToggleBookmark}>
+                        {!isBookmarked ? (
+                            <Image
+                                source={icons.bookmark}
+                                style={{ height: 30, width: 30 }}
+                                resizeMode="contain"
+                            />
+                        ) : (
+                            <Image
+                                source={icons.bookmarkActive}
+                                style={{ height: 30, width: 30 }}
+                                resizeMode="contain"
+                            />
+                        )}
+                    </TouchableOpacity>
+                    {/* Onpress open menu to inspect details about video */}
+                    <TouchableOpacity>
+                        <Image
+                            source={icons.menu}
+                            style={{ height: 30, width: 30 }}
+                            resizeMode="contain"
+                        />
+                    </TouchableOpacity>
                 </View>
             </View>
             {play ? (
@@ -185,10 +237,10 @@ const VideoCard = ({
                         resizeMode={ResizeMode.COVER}
                         shouldPlay
                         onPlaybackStatusUpdate={status => {
-                            if (status.didJustFinish) {
+                            // if (status.didJustFinish) {
+                            if (status.isLoaded) {
                                 setPlay(false);
                             }
-                            console.log(status);
                         }}
                         onError={error => {
                             console.error("Video error:", error);
