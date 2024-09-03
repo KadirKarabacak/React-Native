@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 
-const useAppwrite = fn => {
+const useAppwrite = (fn: any) => {
     const [data, setData] = useState<any>([]);
     const [isLoading, setIsLoading] = useState(false);
 
