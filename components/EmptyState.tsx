@@ -3,14 +3,23 @@ import React from "react";
 import { images } from "@/constants";
 import { pMedium, pSemibold } from "@/constants/fonts";
 import CustomButton from "./CustomButton";
-import { router } from "expo-router";
+import { Href, router } from "expo-router";
 
 interface EmptyStateTypes {
     title: string;
     subtitle: string;
+    shouldDisplayButton?: boolean;
+    buttonTitle?: string;
+    redirectPath: Href<string>;
 }
 
-const EmptyState = ({ title, subtitle }: EmptyStateTypes) => {
+const EmptyState = ({
+    title,
+    subtitle,
+    shouldDisplayButton = true,
+    buttonTitle,
+    redirectPath,
+}: EmptyStateTypes) => {
     return (
         <View
             style={{
@@ -48,17 +57,19 @@ const EmptyState = ({ title, subtitle }: EmptyStateTypes) => {
             >
                 {subtitle}
             </Text>
-            <CustomButton
-                title="Create Video"
-                handlePress={() => {
-                    router.push("/create");
-                }}
-                containerStyles={{
-                    width: "100%",
-                    marginTop: 20,
-                    marginBottom: 20,
-                }}
-            />
+            {shouldDisplayButton && (
+                <CustomButton
+                    title={buttonTitle}
+                    handlePress={() => {
+                        router.push(redirectPath);
+                    }}
+                    containerStyles={{
+                        width: "100%",
+                        marginTop: 20,
+                        marginBottom: 20,
+                    }}
+                />
+            )}
         </View>
     );
 };
