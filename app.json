@@ -14,7 +14,8 @@
         },
         "ios": {
             "supportsTablet": true,
-            "package": "com.exsoftware.aora"
+            "package": "com.exsoftware.aora",
+            "bundleIdentifier": "com.exsoftware.aora"
         },
         "android": {
             "adaptiveIcon": {
@@ -31,6 +32,14 @@
         "plugins": ["expo-router"],
         "experiments": {
             "typedRoutes": true
+        },
+        "extra": {
+            "router": {
+                "origin": false
+            },
+            "eas": {
+                "projectId": "b340e324-df9c-464e-9200-4aa1493dd775"
+            }
         }
     }
 }
