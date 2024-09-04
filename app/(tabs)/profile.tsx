@@ -30,8 +30,6 @@ const Profile = () => {
         router.replace("/sign-in");
     };
 
-    if (isLoading) return <ActivityIndicator size="large" color="#FF9C01" />;
-
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
             <FlatList
