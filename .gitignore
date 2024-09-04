@@ -9,9 +9,10 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+.env
 
 # Use env file to set env variables work on production instead of pushing appwrite.ts
-appwrite.ts
+# appwrite.ts
 
 # macOS
 .DS_Store
