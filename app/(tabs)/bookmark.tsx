@@ -13,15 +13,17 @@ const Bookmark = () => {
     const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([]);
 
     useEffect(() => {
-        async function findBookedVideos() {
-            const allPosts = await getAllPosts();
-            const findBookmarkedPosts = allPosts.filter(post =>
-                user.bookmarkedVideos.includes(post.$id)
-            );
-            setBookmarkedPosts(findBookmarkedPosts);
+        if (user) {
+            async function findBookedVideos() {
+                const allPosts = await getAllPosts();
+                const findBookmarkedPosts = allPosts.filter(post =>
+                    user?.bookmarkedVideos.includes(post.$id)
+                );
+                setBookmarkedPosts(findBookmarkedPosts);
+            }
+            findBookedVideos();
         }
-        findBookedVideos();
-    }, [user.bookmarkedVideos]);
+    }, [user?.bookmarkedVideos]);
 
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
