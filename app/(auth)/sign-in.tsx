@@ -47,6 +47,7 @@ const SignIn = () => {
             router.replace("/home");
         } catch (error: any) {
             // Alert Errors
+            console.log(error.message);
             Alert.alert("Error", error.message);
         } finally {
             // Loading indicator passive
