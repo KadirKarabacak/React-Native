@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Alert } from "react-native";
 
 const useAppwrite = (fn: any) => {
     const [data, setData] = useState<any>([]);
@@ -11,7 +10,7 @@ const useAppwrite = (fn: any) => {
             const response = await fn();
             setData(response);
         } catch (error: any) {
-            Alert.alert("Error", error.message);
+            console.log(error.message);
         } finally {
             setIsLoading(false);
         }
