@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
 } from "react-native-gesture-handler";
 import WebView from "react-native-webview";
+import RenderLoading from "./RenderLoading";
 
 const zoomIn = {
     0: {
@@ -72,6 +73,7 @@ const TrendingItem = ({ activeItem, item }: { activeItem: any; item: any }) => {
                                 const { nativeEvent } = syntheticEvent;
                                 if (nativeEvent.progress == 1) setPlay(true);
                             }}
+                            renderLoading={() => <RenderLoading size="large" />}
                         />
                     </View>
                 ) : (
