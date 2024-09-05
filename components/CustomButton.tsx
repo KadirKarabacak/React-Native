@@ -20,14 +20,14 @@ const CustomButton = ({
     return (
         <TouchableOpacity
             onPress={handlePress}
-            activeOpacity={0.7}
+            activeOpacity={0.85}
             style={{
-                backgroundColor: "#FF9C01",
+                backgroundColor: "#ffad28",
                 borderRadius: 10,
                 minHeight: 62,
                 justifyContent: "center",
                 alignItems: "center",
-                opacity: isLoading ? 0.5 : 1,
+                opacity: isLoading ? 0.7 : 1,
                 ...containerStyles,
             }}
             disabled={isLoading}
@@ -42,7 +42,7 @@ const CustomButton = ({
                 }}
             >
                 {isLoading ? (
-                    <ActivityIndicator size="small" color="#161622" />
+                    <ActivityIndicator size="small" color="#ffffff" />
                 ) : (
                     title
                 )}
