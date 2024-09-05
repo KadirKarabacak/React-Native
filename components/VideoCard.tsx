@@ -3,9 +3,16 @@ import { pRegular, pSemibold } from "@/constants/fonts";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { addBookmark, removeBookmark } from "@/lib/appwrite";
 import { ResizeMode, Video } from "expo-av";
-import React, { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+    ActivityIndicator,
+    Image,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import WebView from "react-native-webview";
+import RenderLoading from "./RenderLoading";
 
 interface CreatorTypes {
     username: string;
@@ -43,6 +50,23 @@ const VideoCard = ({
     const [isBookmarked, setIsBookmarked] = useState(
         user?.bookmarkedVideos?.includes($id)
     );
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
+
+    const handlePlayBackStatus = async (status: any) => {
+        if (status.isPlaying) setIsPlaying(true);
+        if (!status.isPlaying) setIsPlaying(false);
+        if (status.isLoaded) setIsLoaded(true);
+        if (status.isLoaded && !status.isPlaying) {
+            // Video yüklendiyse ve oynamıyorsa, otomatik başlat
+            await videoRef?.current?.playAsync();
+        }
+
+        if (status.didJustFinish) {
+            setPlay(false);
+        }
+    };
 
     useEffect(() => {
         setIsBookmarked(user?.bookmarkedVideos?.includes($id));
@@ -54,14 +78,14 @@ const VideoCard = ({
             setIsBookmarked(true);
             setUser({
                 ...user,
-                bookmarkedVideos: [...user.bookmarkedVideos, $id],
+                bookmarkedVideos: [...user?.bookmarkedVideos, $id],
             });
         } else {
             await removeBookmark($id);
             setIsBookmarked(false);
             setUser({
                 ...user,
-                bookmarkedVideos: user.bookmarkedVideos.filter(
+                bookmarkedVideos: user?.bookmarkedVideos.filter(
                     (videoId: string) => videoId !== $id
                 ),
             });
@@ -210,43 +234,51 @@ const VideoCard = ({
                                 const { nativeEvent } = syntheticEvent;
                                 if (nativeEvent.progress == 1) setPlay(true);
                             }}
-                            // onLoadStart={() => console.log("Load started")}
-                            // onLoadEnd={() => setPlay(true)}
-                            // onError={error => {
-                            //     console.log("Error loading page:", error);
-                            //     setPlay(false);
-                            // }}
-                            // onMessage={event =>
-                            //     console.log(
-                            //         "Message from webview:",
-                            //         event.nativeEvent.data
-                            //     )
-                            // }
+                            renderLoading={() => (
+                                <RenderLoading
+                                    size="large"
+                                    containerStyles={{
+                                        backgroundColor:
+                                            "rgba(255,255,255,0.8)",
+                                    }}
+                                />
+                            )}
                         />
                     </View>
                 ) : (
-                    <Video
-                        source={{ uri: video }}
-                        style={{
-                            width: "100%",
-                            height: 220,
-                            borderRadius: 20,
-                            marginTop: 15,
-                        }}
-                        useNativeControls
-                        resizeMode={ResizeMode.COVER}
-                        shouldPlay
-                        onPlaybackStatusUpdate={status => {
-                            // if (status.didJustFinish) {
-                            if (status.isLoaded) {
+                    <>
+                        <Video
+                            ref={videoRef}
+                            source={{ uri: video }}
+                            style={{
+                                width: "100%",
+                                height: 300,
+                                borderRadius: 20,
+                                marginTop: 15,
+                                position: "relative",
+                            }}
+                            // onLoadStart={() => setIsPreloading(true)}
+                            // onReadyForDisplay={() => setIsPreloading(false)}
+                            useNativeControls
+                            resizeMode={ResizeMode.COVER}
+                            shouldPlay
+                            isLooping
+                            onPlaybackStatusUpdate={handlePlayBackStatus}
+                            onError={error => {
+                                console.error("Video error:", error);
                                 setPlay(false);
-                            }
-                        }}
-                        onError={error => {
-                            console.error("Video error:", error);
-                            setPlay(false);
-                        }}
-                    />
+                            }}
+                        />
+                        {/* Show loader while video is loading or isn't playing */}
+                        {(!isLoaded || !isPlaying) && (
+                            <RenderLoading
+                                size="large"
+                                // containerStyles={{
+                                //     backgroundColor: "rgba(255,255,255,0.8)",
+                                // }}
+                            />
+                        )}
+                    </>
                 )
             ) : (
                 <TouchableOpacity
