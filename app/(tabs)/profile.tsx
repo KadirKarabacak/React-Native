@@ -6,28 +6,28 @@ import { getUserPosts, signOut } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import { router } from "expo-router";
 import React from "react";
-import {
-    ActivityIndicator,
-    FlatList,
-    Image,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
-    const { data: posts, isLoading } = useAppwrite(() =>
-        getUserPosts(user.$id)
-    );
     const { user, setUser, setIsLoggedIn } = useGlobalContext();
-    // const [refreshing, setRefreshing] = useState(false);
+    const { data: posts } = useAppwrite(() => getUserPosts(user?.$id));
 
     const logout = async () => {
-        await signOut();
-        setUser(null);
-        setIsLoggedIn(false);
+        try {
+            await signOut();
+            setUser(null);
+            setIsLoggedIn(false);
 
-        router.replace("/sign-in");
+            router.replace("/sign-in");
+        } catch (error: any) {
+            if (error.type === "AppwriteException") {
+                return;
+                // Kullanıcı oturumu kapanmışsa gerekli işlemleri yap (örneğin logout tekrar)
+                // await signOut();
+            }
+            console.error("Logout error:", error.message);
+        }
     };
 
     return (
