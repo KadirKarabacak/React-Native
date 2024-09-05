@@ -30,7 +30,7 @@ const Home = () => {
     useEffect(() => {
         // Refetch posts whenever the bookmarkedVideos array changes
         refetch();
-    }, [user.bookmarkedVideos]);
+    }, [user?.bookmarkedVideos]);
 
     return (
         <SafeAreaView style={{ backgroundColor: "#161622", height: "100%" }}>
