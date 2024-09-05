@@ -111,6 +111,7 @@ export const signIn = async ({ email, password }: SignInTypes) => {
             email,
             password
         );
+
         return session;
     } catch (error: any) {
         throw new Error(error);
@@ -134,7 +135,7 @@ export const getCurrentUser = async () => {
         // If everything is okay
         return currentUser.documents[0];
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 };
 
@@ -196,10 +197,10 @@ export const getUserPosts = async (userId: any) => {
 
 export const signOut = async () => {
     try {
-        const session = await account.deleteSession("current");
-
+        const session = await account.deleteSessions();
         return session;
     } catch (error: any) {
+        console.error("Sign out error:", error.message);
         throw new Error(error.message);
     }
 };
@@ -312,9 +313,6 @@ export const removeBookmark = async (videoId: string) => {
         // Mevcut kullanıcı dökümanını al
         const userDocument = await getCurrentUser();
 
-        // bookmarkedVideos array'ine videoId'yi ekle
-        // if (userDocument?.bookmarkedVideos.includes(videoId))
-        //     return Alert.alert("Info", "This video is already bookmarked");
         const updatedBookmarks = userDocument?.bookmarkedVideos.filter(
             (id: string) => id !== videoId
         );
