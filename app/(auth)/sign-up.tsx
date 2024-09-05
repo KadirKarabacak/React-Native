@@ -24,7 +24,7 @@ const SignUp = () => {
     const submit = async () => {
         // Validation for fields
         if (!form.email || !form.password || !form.userName)
-            Alert.alert("Error", "Please fill in all the fields");
+            return Alert.alert("Error", "Please fill in all the fields");
 
         // Loading indicator active
         setIsSubmitting(true);
